@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tvättstuga</title>
+    <link rel="stylesheet" href="style.css">
+    
+    
+    
+    
+
+		<link rel="stylesheet" type="text/css" href="jsCalendar.css">
+</head>
+<body>
+    <div>
+        <h2>Tvättstugan</h2>
+        <div>
+        <!-- Calendar Element -->
+            <div>	    
+                <div id="kallender" class="material-theme blue" data-language="sv"></div>
+                   
+                <div class="inmatning">
+                <input type="text" id="input_datum" readonly >
+                <input type="time">
+                <input class="buttons" type="text" placeholder="Namn">
+                <input class="buttons" type="text"placeholder="Tel">
+                <input type="hidden" name="" id="b_id">
+                <b>Webbbokning</b><input type="checkbox" class="checkb" name="" id="online">
+                <div class="knappar">
+                <button id="boka">Boka</button>
+                <button id="avboka">AvBoka</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="div_boningslista">
+
+
+        </div>
+
+    </div>
+    
+</body>
+<!-- jsCalendar Javascript and CSS -->
+<script type="text/javascript" src="jsCalendar.js"></script>
+<script type="text/javascript" src="jsCalendar.lang.sv.js"></script>
+<script src="app.js"></script>
+</html>

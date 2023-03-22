@@ -1,0 +1,28 @@
+#kallender{
+    display: inline-block;
+    margin: 20px;
+    width: fit-content;
+}
+.inmatning_kalender{
+    display: inline-block;
+    width: fit-content;
+    top:0%;
+    height: 300px;
+    
+    
+}
+input{
+    display: block;
+    margin: 10px;
+}
+
+.checkb{
+display: inline;
+}
+
+.knappar {
+    margin: 20px;
+}
+h2{
+    margin: 20px;
+}
