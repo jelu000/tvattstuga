@@ -26,3 +26,17 @@ display: inline;
 h2{
     margin: 20px;
 }
+.klocka {
+    display: inline;
+}
+
+b {
+    margin-left: 20px;
+}
+input{
+    margin-left: 20px;
+}
+button{
+    margin-left: 20px;
+    width: 80px;
+}

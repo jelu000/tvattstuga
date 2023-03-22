@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tvättstuga</title>
     <link rel="stylesheet" href="style.css">
-    
+    <link rel="shortcut icon" href="#">
     
     
     
@@ -23,20 +23,20 @@
                    
                 <div class="inmatning">
                 <input type="text" id="input_datum" readonly >
-                <input type="time">
-                <input class="buttons" type="text" placeholder="Namn">
-                <input class="buttons" type="text"placeholder="Tel">
+                <b>Tid </b><input id ="tid" class="klocka" type="time">
+                <input type="text" id="namn_input" placeholder="Namn">
+                <input type="text" id="tel_input" placeholder="Tel">
                 <input type="hidden" name="" id="b_id">
-                <b>Webbbokning</b><input type="checkbox" class="checkb" name="" id="online">
+                <b>Webbbokning</b><input type="checkbox" class="checkb" name="" id="webtid">
                 <div class="knappar">
-                <button id="boka">Boka</button>
-                <button id="avboka">AvBoka</button>
+                <button id="boka" class="buttons" onclick="bokaTid()">Boka</button>
+                <button id="avboka" class="buttons" onclick="avBokaTid()">AvBoka</button>
                 </div>
             </div>
         </div>
     </div>
 
-        <div class="div_boningslista">
+        <div class="div_bokningslista">
 
 
         </div>
