@@ -23,6 +23,8 @@ let namn_input = document.getElementById("namn_input");
 let tel_input = document.getElementById("tel_input");
 let webtid_input = document.getElementById("webtid");
 
+let vald_dag_bokningar = [];
+
 minKallender.onDateClick(function(event, date){
     const weekday = ["Söndag","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag"];
     
@@ -51,7 +53,7 @@ minKallender.onDateClick(function(event, date){
 
     //datum_input.value = date.toString();
     datum_input.value=dateFormat;
-
+    vald_dag_bokningar = getDayBokinDataDb(dateFormat);
     //let dagnr = d.getDay();
     console.log(dateFormat);
     //console.log(weekday[dagnr]);
@@ -64,7 +66,10 @@ function bokaTid(){
         const now = Date.now(); 
         const id = now.toString()
         
-        let bokning = new Bokning(id, namn_input.value, tel_input.value, tid_input.value, datum_input.value, webtid_input.checked);
+        let t_datum = datum_input.value;
+        let bokning = new Bokning(id, namn_input.value, tel_input.value, tid_input.value, t_datum, webtid_input.checked);
+
+        setDayBokingDataDb(bokning, t_datum, vald_dag_bokningar );
 
         console.log(`Json= ${JSON.stringify(bokning)}`);
 
@@ -75,6 +80,37 @@ function bokaTid(){
 }
 
 function avBokaTid(){
+
+}
+
+//CRUD funtions Hämtar data från Backend----------
+
+async function getDayBokinDataDb(t_date){
+    let dagbokningar = []
+
+    try {
+          
+        dagbokningar = await JSON.parse(localStorage.getItem("t_date") );
+
+        //Om billistan  är tom Null från localStorage
+        if (dagbokningar == null)
+            dagbokningar = []
+        
+    }
+    catch (e){
+        
+        console.log(`Fel: ${e}`)
+    }
+
+    return dagbokningar;
+}
+
+async function setDayBokingDataDb(t_bokning, t_date, t_dagbokningar){
+
+    t_dagbokningar.push(t_bokning);
+    t_dagbokningar.sort((firstBoking, secondBoking) => firstBoking.tid - secondBoking.tid);
+    
+    localStorage.setItem(t_date , JSON.stringify(t_dagbokningar));
 
 }
 
