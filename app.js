@@ -53,9 +53,11 @@ minKallender.onDateClick(function(event, date){
 
     //datum_input.value = date.toString();
     datum_input.value=dateFormat;
-    vald_dag_bokningar = getDayBokinDataDb(dateFormat);
+    getDayBokinDataDb(dateFormat);
     //let dagnr = d.getDay();
     console.log(dateFormat);
+    
+
     //console.log(weekday[dagnr]);
 
 });
@@ -65,13 +67,15 @@ function bokaTid(){
     if (namn_input.value !== ""){
         const now = Date.now(); 
         const id = now.toString()
-        
+        console.log(`boka tid array Json= ${JSON.stringify(vald_dag_bokningar)}`);
         let t_datum = datum_input.value;
         let bokning = new Bokning(id, namn_input.value, tel_input.value, tid_input.value, t_datum, webtid_input.checked);
 
-        setDayBokingDataDb(bokning, t_datum, vald_dag_bokningar );
-
-        console.log(`Json= ${JSON.stringify(bokning)}`);
+        vald_dag_bokningar.push(bokning);
+    
+        vald_dag_bokningar = vald_dag_bokningar.sort((firstBoking, secondBoking) => firstBoking.tid > secondBoking.tid);
+        setDayBokingDataDb(vald_dag_bokningar, t_datum );
+        //console.log(`Json= ${JSON.stringify(vald_dag_bokningar)}`);
 
     }
     else
@@ -90,27 +94,32 @@ async function getDayBokinDataDb(t_date){
 
     try {
           
-        dagbokningar = await JSON.parse(localStorage.getItem("t_date") );
-
-        //Om billistan  är tom Null från localStorage
-        if (dagbokningar == null)
-            dagbokningar = []
+        dagbokningar = await JSON.parse(localStorage.getItem(t_date) );
         
+        //Om billistan  är tom Null från localStorage
+        if (dagbokningar == null){
+            vald_dag_bokningar = []
+            console.log(`hämtar ${dagbokningar}`)
+        }
+        else{
+            console.log(`hämtar2 ${dagbokningar}`)
+            vald_dag_bokningar = dagbokningar;
+        }
     }
     catch (e){
         
         console.log(`Fel: ${e}`)
     }
 
-    return dagbokningar;
+    //return dagbokningar;
 }
 
-async function setDayBokingDataDb(t_bokning, t_date, t_dagbokningar){
-
-    t_dagbokningar.push(t_bokning);
-    t_dagbokningar.sort((firstBoking, secondBoking) => firstBoking.tid - secondBoking.tid);
+async function setDayBokingDataDb(t_bokningar_dag, t_date){
+//console.log(`setB ${t_bokning.namn}`)
+    //vald_dag_bokningar.push(t_bokning);
+    //t_dagbokningar.sort((firstBoking, secondBoking) => firstBoking.tid - secondBoking.tid);
     
-    localStorage.setItem(t_date , JSON.stringify(t_dagbokningar));
+    localStorage.setItem(t_date , JSON.stringify(t_bokningar_dag));
 
 }
 
