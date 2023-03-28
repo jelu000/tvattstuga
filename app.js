@@ -17,11 +17,14 @@ var kallender = document.getElementById("kallender");
 var minKallender = jsCalendar.new(kallender);
 
 let tid_input = document.getElementById("tid");
-tid_input.defaultValue = "9:00"; 
+tid_input.defaultValue = "09:00"; 
 let datum_input = document.getElementById("input_datum");
 let namn_input = document.getElementById("namn_input");
 let tel_input = document.getElementById("tel_input");
 let webtid_input = document.getElementById("webtid");
+
+let bokning_table_body = document.getElementById("table_body");
+
 
 let vald_dag_bokningar = [];
 
@@ -35,32 +38,20 @@ minKallender.onDateClick(function(event, date){
     let getDay = date.toLocaleString("default", { day: "2-digit" });
     let dateFormat = getYear + "-" + getMonth + "-" + getDay;
 
-    
-
-    //const d_add1dag = d.setDate(d.getDate() + 1)
-    //const tdate =  d.toLocaleTimeString([], {year: 'numeric', month: 'numeric', day: ''});
-
-    //let dateFormat = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate()
-    //let dateFormat  = d.toISOString().slice(0, 10);
-    //let dateFormat  = date.toISOString().slice(0, 10);
-
-    //let dateFormat = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd')
-    //(new Date()).format('yyyy-MM-dd')
-    //let dateFormat = date.format('yyyy-MM-dd')
-   // let dateFormat = (new Date(date)).format('yyyy-MM-dd')
-   //ISO Date 	"2015-03-25" (The International Standard)
-    //let dateFormat = d.format('yyyy-MM-dd')
-
     //datum_input.value = date.toString();
     datum_input.value=dateFormat;
     getDayBokinDataDb(dateFormat);
     //let dagnr = d.getDay();
     console.log(dateFormat);
-    
+      
 
-    //console.log(weekday[dagnr]);
 
 });
+
+let delButtonClick = (e) => {
+    const sourceElement = e.target;
+    console.log(`id= ${sourceElement.id}`);
+}
 
 function bokaTid(){
 
@@ -72,8 +63,7 @@ function bokaTid(){
         let bokning = new Bokning(id, namn_input.value, tel_input.value, tid_input.value, t_datum, webtid_input.checked);
 
         vald_dag_bokningar.push(bokning);
-    
-        vald_dag_bokningar = vald_dag_bokningar.sort((firstBoking, secondBoking) => firstBoking.tid > secondBoking.tid);
+  
         setDayBokingDataDb(vald_dag_bokningar, t_datum );
         //console.log(`Json= ${JSON.stringify(vald_dag_bokningar)}`);
 
@@ -83,7 +73,31 @@ function bokaTid(){
 
 }
 
-function avBokaTid(){
+function listDayBokings(){
+  
+    //console.log(`längd= ${vald_dag_bokningar.length}`)
+
+    let tr_string = "";
+    
+    vald_dag_bokningar.forEach(dbokn => {
+        tr_string += `<tr>
+        <td>${dbokn.tid}</td><td>${dbokn.namn}</td><td>${dbokn.tel}</td><td>${dbokn.b_id}</td><td><input type="checkbox" name="webb_id" id="webb_id"></td><td><button onclick="delButtonClick(event)" name="${dbokn.b_id}" id="${dbokn.b_id}">avboka</button></td>
+        </tr>`    
+    });
+
+    bokning_table_body.innerHTML=tr_string;
+
+
+}
+
+let bokingSort = (a, b) => {
+    if (a.tid < b.tid) {
+        return -1;
+      }
+      if (a.tid > b.tid) {
+        return 1;
+      }
+      return 0;
 
 }
 
@@ -95,7 +109,9 @@ async function getDayBokinDataDb(t_date){
     try {
           
         dagbokningar = await JSON.parse(localStorage.getItem(t_date) );
+
         
+
         //Om billistan  är tom Null från localStorage
         if (dagbokningar == null){
             vald_dag_bokningar = []
@@ -103,8 +119,13 @@ async function getDayBokinDataDb(t_date){
         }
         else{
             console.log(`hämtar2 ${dagbokningar}`)
+            //dagbokningar.sort((a, b) => a.namn > b.namn);//Sort funkar ej
+            dagbokningar.sort(bokingSort);//funkar
+            
             vald_dag_bokningar = dagbokningar;
         }
+
+        listDayBokings(); 
     }
     catch (e){
         
@@ -116,9 +137,7 @@ async function getDayBokinDataDb(t_date){
 
 async function setDayBokingDataDb(t_bokningar_dag, t_date){
 //console.log(`setB ${t_bokning.namn}`)
-    //vald_dag_bokningar.push(t_bokning);
-    //t_dagbokningar.sort((firstBoking, secondBoking) => firstBoking.tid - secondBoking.tid);
-    
+
     localStorage.setItem(t_date , JSON.stringify(t_bokningar_dag));
 
 }

@@ -40,3 +40,29 @@ button{
     margin-left: 20px;
     width: 80px;
 }
+
+.th_tid {
+    width: 50px;
+    text-align: left;
+}
+.th_namn{
+    width: 200px;
+    text-align: left;
+}
+.th_tel{
+    width: 100px;
+    text-align: left;
+}
+.th_id{
+    width: 60px;
+    text-align: left;
+}
+.th_webb{
+    width: 40px;
+    text-align: left;
+}
+.th_avboka{
+    width: 60px;
+    text-align: center;
+}
+

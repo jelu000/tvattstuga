@@ -1,0 +1,25 @@
+ //const d_add1dag = d.setDate(d.getDate() + 1)
+    //const tdate =  d.toLocaleTimeString([], {year: 'numeric', month: 'numeric', day: ''});
+
+    //let dateFormat = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate()
+    //let dateFormat  = d.toISOString().slice(0, 10);
+    //let dateFormat  = date.toISOString().slice(0, 10);
+
+    //let dateFormat = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd')
+    //(new Date()).format('yyyy-MM-dd')
+    //let dateFormat = date.format('yyyy-MM-dd')
+   // let dateFormat = (new Date(date)).format('yyyy-MM-dd')
+   //ISO Date 	"2015-03-25" (The International Standard)
+    //let dateFormat = d.format('yyyy-MM-dd')
+
+      /*vald_dag_bokningar.sort((firstBoking, secondBoking) => {
+            if (firstBoking.namn > secondBoking.namn) {
+                return -1;
+            }
+            if (firstBoking.namn < secondBoking.namn) {
+                return 1;
+            }
+            return 0;
+        });*/
+    
+        //vald_dag_bokningar.sort((a, b) => a.tid < b.tid);
