@@ -25,46 +25,58 @@ let webtid_input = document.getElementById("webtid");
 
 let bokning_table_body = document.getElementById("table_body");
 
+const now = new Date();
+now.getDate(); 
+datum_input.value = skapaDatumString(now);
+getDayBokinDataDb(datum_input.value);
+
 
 let vald_dag_bokningar = [];
 
 minKallender.onDateClick(function(event, date){
     const weekday = ["Söndag","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag"];
     
-
-    //https://linuxhint.com/format-date-as-yyyy-mm-dd-in-javascript/
-    let getYear = date.toLocaleString("default", { year: "numeric" });
-    let getMonth = date.toLocaleString("default", { month: "2-digit" });
-    let getDay = date.toLocaleString("default", { day: "2-digit" });
-    let dateFormat = getYear + "-" + getMonth + "-" + getDay;
-
+     let dateFormat = skapaDatumString(date);
     //datum_input.value = date.toString();
     datum_input.value=dateFormat;
     getDayBokinDataDb(dateFormat);
     //let dagnr = d.getDay();
     console.log(dateFormat);
       
-
-
 });
 
-let delButtonClick = (e) => {
-    const sourceElement = e.target;
-    console.log(`id= ${sourceElement.id}`);
+function skapaDatumString(t_date){
+    let getYear = t_date.toLocaleString("default", { year: "numeric" });
+    let getMonth = t_date.toLocaleString("default", { month: "2-digit" });
+    let getDay = t_date.toLocaleString("default", { day: "2-digit" });
+    let dateFormat = getYear + "-" + getMonth + "-" + getDay;
+
+    return dateFormat;
 }
 
-function bokaTid(){
+
+
+async function delButtonClick(e) {
+    const sourceElement = e.target;
+    console.log(`id= ${sourceElement.id}`);
+
+    await delDayBoking(vald_dag_bokningar, datum_input.value, sourceElement.id);
+
+}
+
+async function bokaTid(){
 
     if (namn_input.value !== ""){
         const now = Date.now(); 
         const id = now.toString()
-        console.log(`boka tid array Json= ${JSON.stringify(vald_dag_bokningar)}`);
+        console.log(`daum= ${now}`)
+        //console.log(`boka tid array Json= ${JSON.stringify(vald_dag_bokningar)}`);
         let t_datum = datum_input.value;
         let bokning = new Bokning(id, namn_input.value, tel_input.value, tid_input.value, t_datum, webtid_input.checked);
 
         vald_dag_bokningar.push(bokning);
   
-        setDayBokingDataDb(vald_dag_bokningar, t_datum );
+        await setDayBokingDataDb(vald_dag_bokningar, t_datum );
         //console.log(`Json= ${JSON.stringify(vald_dag_bokningar)}`);
 
     }
@@ -86,8 +98,6 @@ function listDayBokings(){
     });
 
     bokning_table_body.innerHTML=tr_string;
-
-
 }
 
 let bokingSort = (a, b) => {
@@ -101,7 +111,7 @@ let bokingSort = (a, b) => {
 
 }
 
-//CRUD funtions Hämtar data från Backend----------
+//CRUD funtions, Hämtar data från Backend-------------------------------------------------------------------------------------
 
 async function getDayBokinDataDb(t_date){
     let dagbokningar = []
@@ -109,8 +119,6 @@ async function getDayBokinDataDb(t_date){
     try {
           
         dagbokningar = await JSON.parse(localStorage.getItem(t_date) );
-
-        
 
         //Om billistan  är tom Null från localStorage
         if (dagbokningar == null){
@@ -139,6 +147,24 @@ async function setDayBokingDataDb(t_bokningar_dag, t_date){
 //console.log(`setB ${t_bokning.namn}`)
 
     localStorage.setItem(t_date , JSON.stringify(t_bokningar_dag));
+    //listDayBokings();
+    getDayBokinDataDb(t_date);
+}
 
+async function delDayBoking(t_bokningar_dag, t_date, t_id){
+
+    try{
+
+        const del_t_bokningar_dag = await t_bokningar_dag.filter((o, i) => o.b_id !== t_id)//e.target.id
+        localStorage.setItem(t_date , JSON.stringify(del_t_bokningar_dag));
+        getDayBokinDataDb(t_date);
+        
+
+       
+
+    }
+    catch(e){
+        alert(`Kunde inte tabort bokning: ${e}`)
+    }
 }
 
